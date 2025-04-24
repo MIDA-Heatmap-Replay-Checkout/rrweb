@@ -1419,6 +1419,20 @@ export class Replayer {
         // no need to warn here, an ancestor may have already been removed
         return;
       }
+
+      if (mutation.parentId === mutation.id) {
+        if (target.parentNode) {
+          target.parentNode.removeChild(target  as Node & RRNode);
+        }
+        mirror.removeNodeFromMap(target as Node & RRNode);
+        return;
+      }
+
+      if (!mutation.parentId) {
+        mirror.removeNodeFromMap(target as Node & RRNode);
+        return;
+      }
+
       let parent: Node | null | ShadowRoot | RRNode = mirror.getNode(
         mutation.parentId,
       );
