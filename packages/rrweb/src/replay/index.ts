@@ -1407,6 +1407,10 @@ export class Replayer {
     d.removes = d.removes.filter((mutation) => {
       // warn of absence from mirror before we start applying each removal
       // as earlier removals could remove a tree that includes a later removal
+      if(mutation.querySelector) {
+          return true;
+      }
+
       if (!mirror.getNode(mutation.id)) {
         this.warnNodeNotFound(d, mutation.id);
         return false;
@@ -1414,6 +1418,10 @@ export class Replayer {
       return true;
     });
     d.removes.forEach((mutation) => {
+      if(mutation.querySelector) {
+        const removeElement = this?.iframe?.contentDocument?.querySelector(mutation.querySelector)
+          if (removeElement) removeElement.remove()
+      }
       const target = mirror.getNode(mutation.id);
       if (!target) {
         // no need to warn here, an ancestor may have already been removed
@@ -1803,10 +1811,14 @@ export class Replayer {
                   textarea.appendChild(tn as TNode);
                 }
               } else {
-                (target as Element | RRElement).setAttribute(
-                  attributeName,
-                  value,
-                );
+                if(attributeName === "textContent") {
+                  target.textContent = value;
+                } else {
+                  (target as Element | RRElement).setAttribute(
+                    attributeName,
+                    value,
+                  );
+                }
               }
             } catch (error) {
               this.warn(
