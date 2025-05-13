@@ -634,6 +634,9 @@ export class Replayer {
 
   private applyEventsSynchronously = (events: Array<eventWithTime>) => {
     for (const event of events) {
+      if (event.type === EventType.Custom) {
+        this.emitter.emit(ReplayerEvents.CustomEvent, event);
+      }
       switch (event.type) {
         case EventType.DomContentLoaded:
         case EventType.Load:
@@ -1646,6 +1649,8 @@ export class Replayer {
         (parent as TNode).contains(next as TNode)
           ? (parent as TNode).insertBefore(target as TNode, next as TNode)
           : (parent as TNode).insertBefore(target as TNode, null);
+      } else if(!previous && !next && mutation.node?.checkoutNode) {
+        (parent as TNode).insertBefore(target as TNode, parent.firstChild as TNode);
       } else {
         (parent as TNode).appendChild(target as TNode);
       }

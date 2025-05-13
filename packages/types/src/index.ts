@@ -315,6 +315,7 @@ export type removedNodeMutation = {
   parentId: number;
   id: number;
   isShadow?: boolean;
+  querySelector?: string;
 };
 
 export type addedNodeMutation = {
