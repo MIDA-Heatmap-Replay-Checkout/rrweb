@@ -1,6 +1,6 @@
 {
   "name": "@bss-sbc/rrweb",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "record and replay the web",
   "repository": {
     "type": "git",

@@ -420,6 +420,10 @@ export function buildNodeWithSN(
    * This situation (duplicated nodes) can happen when recorder has some unfixed bugs and the same node is recorded twice. Or something goes wrong when saving or transferring event data.
    * Duplicated node creation may cause unexpected errors in replayer. This check tries best effort to prevent the errors.
    */
+  if (!n?.id) {
+    console.warn('Node has no id', n);
+    return null;
+  }
   if (mirror.has(n.id)) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const nodeInMirror = mirror.getNode(n.id)!;
